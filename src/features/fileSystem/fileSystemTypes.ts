@@ -6,7 +6,7 @@ export interface FileSystemItem {
   type: ItemType;
   content?: string;
   parentId: string | null;
-  childrenIds: string[]; // For folders
+  childrenIds: string[];
   createdAt: number;
   updatedAt: number;
 }
@@ -41,4 +41,9 @@ export interface DeleteItemPayload {
 export interface UpdateFileContentPayload {
   id: string;
   content: string;
+}
+
+export interface MoveItemPayload {
+  id: string;
+  newParentId: string;
 }
