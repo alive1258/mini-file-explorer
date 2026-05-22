@@ -1,10 +1,11 @@
+import MainPanel from "./components/MainPanel/MainPanel";
 import Sidebar from "./components/Sidebar/Sidebar";
 
 function App() {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
-      {/* <MainPanel /> */}
+      <MainPanel />
     </div>
   );
 }
