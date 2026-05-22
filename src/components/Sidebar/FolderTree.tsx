@@ -4,124 +4,110 @@ import {
   toggleFolder,
   selectFolder,
 } from "../../features/fileSystem/fileSystemSlice";
-
-import { ChevronRight, ChevronDown, Folder } from "../common/Icon";
+import { ChevronRightIcon, ChevronDownIcon, FolderIcon } from "../common/Icon";
 
 interface FolderTreeProps {
   folderId: string;
   level: number;
-  isCollapsed?: boolean;
+  collapsed?: boolean;
+  setMobileOpen?: (v: boolean) => void;
 }
 
 const FolderTree: React.FC<FolderTreeProps> = ({
   folderId,
   level,
-  isCollapsed = false,
+  collapsed = false,
+  setMobileOpen,
 }) => {
   const dispatch = useAppDispatch();
-
-  // Get all items from redux store
   const items = useAppSelector((state) => state.fileSystem.items);
 
-  // Current folder
   const folder = items[folderId];
 
-  // Expanded state
   const isExpanded = useAppSelector(
     (state) => state.fileSystem.folderState.expandedFolders[folderId],
   );
 
-  // Selected folder
   const selectedFolderId = useAppSelector(
     (state) => state.fileSystem.folderState.selectedFolderId,
   );
 
-  // Safety check
-  if (!folder || folder.type !== "folder") {
-    return null;
-  }
+  if (!folder || folder.type !== "folder") return null;
 
-  // Toggle folder open/close
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const subfolders = folder.childrenIds
+    .map((id) => items[id])
+    .filter((child) => child && child.type === "folder");
 
-    if (!isCollapsed) {
-      dispatch(toggleFolder(folderId));
-    }
-  };
-
-  // Select folder
-  const handleSelect = () => {
-    dispatch(selectFolder(folderId));
-  };
-
-  // Collapsed sidebar mode
-  if (isCollapsed) {
-    return (
-      <div
-        className={`flex justify-center p-2 rounded cursor-pointer hover:bg-gray-800 mb-1 transition-colors ${
-          selectedFolderId === folderId ? "bg-gray-800" : ""
-        }`}
-        onClick={handleSelect}
-        title={folder.name}
-      >
-        <Folder size={20} />
-      </div>
-    );
-  }
+  const isActive = selectedFolderId === folderId;
 
   return (
-    <div className="select-none">
-      {/* Folder Row */}
+    <div>
+      {/* NODE */}
       <div
-        className={`flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-gray-800 transition-colors ${
-          selectedFolderId === folderId ? "bg-gray-800" : ""
-        }`}
-        style={{
-          paddingLeft: `${level * 12 + 8}px`,
+        className={`
+          flex items-center gap-2
+          py-1.5 px-2
+          rounded-md
+          cursor-pointer
+          transition
+          hover:bg-gray-800
+          ${isActive ? "bg-gray-800 text-blue-400" : "text-white"}
+        `}
+        style={{ paddingLeft: collapsed ? 8 : level * 14 + 8 }}
+        onClick={() => {
+          dispatch(selectFolder(folderId));
+
+          // ✅ AUTO CLOSE MOBILE SIDEBAR
+          setMobileOpen?.(false);
         }}
-        onClick={handleSelect}
       >
-        {/* Expand / Collapse Button */}
+        {/* EXPAND BUTTON */}
         <button
-          onClick={handleToggle}
-          className="p-1 hover:bg-gray-700 rounded transition-colors"
-          aria-label={isExpanded ? "Collapse" : "Expand"}
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(toggleFolder(folderId));
+          }}
+          className="p-1 rounded hover:bg-gray-700"
         >
-          {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          {subfolders.length > 0 ? (
+            isExpanded ? (
+              <ChevronDownIcon size={14} />
+            ) : (
+              <ChevronRightIcon size={14} />
+            )
+          ) : (
+            <span className="w-3.5 inline-block" />
+          )}
         </button>
 
-        {/* Folder Icon */}
-        <Folder size={18} />
+        <FolderIcon size={18} />
 
-        {/* Folder Name */}
-        <span className="text-sm truncate flex-1">{folder.name}</span>
+        {/* TEXT */}
+        {!collapsed && (
+          <>
+            <span className="text-sm truncate flex-1">{folder.name}</span>
 
-        {/* Child Count */}
-        <span className="text-xs text-gray-500">
-          {folder.childrenIds.length}
-        </span>
+            {subfolders.length > 0 && (
+              <span className="text-[10px] text-gray-500">
+                {subfolders.length}
+              </span>
+            )}
+          </>
+        )}
       </div>
 
-      {/* Child Folders */}
-      {isExpanded && (
-        <div>
-          {folder.childrenIds.map((childId) => {
-            const child = items[childId];
-
-            if (child?.type === "folder") {
-              return (
-                <FolderTree
-                  key={childId}
-                  folderId={childId}
-                  level={level + 1}
-                  isCollapsed={isCollapsed}
-                />
-              );
-            }
-
-            return null;
-          })}
+      {/* CHILDREN */}
+      {isExpanded && subfolders.length > 0 && !collapsed && (
+        <div className="mt-1">
+          {subfolders.map((child) => (
+            <FolderTree
+              key={child.id}
+              folderId={child.id}
+              level={level + 1}
+              collapsed={collapsed}
+              setMobileOpen={setMobileOpen}
+            />
+          ))}
         </div>
       )}
     </div>

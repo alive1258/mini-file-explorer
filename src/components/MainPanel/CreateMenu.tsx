@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Plus, FolderPlus, FilePlus } from "../common/Icon";
+import React, { useState, useEffect, useRef } from "react";
+import { FileIcon, FolderIcon, PlusIcon } from "../common/Icon";
 
 interface CreateMenuProps {
   onNewFolder: () => void;
@@ -8,8 +8,9 @@ interface CreateMenuProps {
 
 const CreateMenu: React.FC<CreateMenuProps> = ({ onNewFolder, onNewFile }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
+  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -17,52 +18,46 @@ const CreateMenu: React.FC<CreateMenuProps> = ({ onNewFolder, onNewFile }) => {
       }
     };
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      }
-    };
-
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative md:text-base text-sm" ref={menuRef}>
+      {/* BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
       >
-        <Plus size={18} />
+        <PlusIcon size={18} />
         <span>Create New</span>
       </button>
 
+      {/* DROPDOWN */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-20 animate-in fade-in slide-in-from-top-2">
+        <div className="absolute right-0 mt-2 w-52 bg-gray-900/60 backdrop-blur-xl border border-gray-700 rounded-lg shadow-xl py-1 z-50 animate-fadeIn">
+          {/* NEW FOLDER */}
           <button
             onClick={() => {
               onNewFolder();
               setIsOpen(false);
             }}
-            className="w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
+            className="w-full px-4 py-2 text-left hover:bg-gray-800 transition flex items-center gap-2 text-white"
           >
-            <FolderPlus size={18} />
-            <span>New Folder</span>
+            <FolderIcon size={18} />
+            New Folder
           </button>
+
+          {/* NEW FILE */}
           <button
             onClick={() => {
               onNewFile();
               setIsOpen(false);
             }}
-            className="w-full px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
+            className="w-full px-4 py-2 text-left hover:bg-gray-800 transition flex items-center gap-2 text-white"
           >
-            <FilePlus size={18} />
-            <span>New Text File</span>
+            <FileIcon size={18} />
+            New Text File
           </button>
         </div>
       )}

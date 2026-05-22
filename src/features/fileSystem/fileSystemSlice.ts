@@ -1,22 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-
+import type { PayloadAction } from "@reduxjs/toolkit";
 import {
   loadFromLocalStorage,
   saveToLocalStorage,
 } from "../../utils/localStorage";
-
-import type {
-  CreateItemPayload,
-  DeleteItemPayload,
-  FileSystemItem,
-  FileSystemState,
-  MoveItemPayload,
-  RenameItemPayload,
-  UpdateFileContentPayload,
-} from "./fileSystemTypes";
 import { initialData } from "../../data/mockData";
+import type { FileSystemItem, FileSystemState } from "./fileSystemTypes";
 
 const initialState: FileSystemState = loadFromLocalStorage() || initialData;
 
@@ -24,7 +14,15 @@ const fileSystemSlice = createSlice({
   name: "fileSystem",
   initialState,
   reducers: {
-    createItem: (state, action: PayloadAction<CreateItemPayload>) => {
+    createItem: (
+      state,
+      action: PayloadAction<{
+        parentId: string;
+        name: string;
+        type: "folder" | "file";
+        content?: string;
+      }>,
+    ) => {
       const { parentId, name, type, content = "" } = action.payload;
       const newId = uuidv4();
       const now = Date.now();
@@ -35,7 +33,7 @@ const fileSystemSlice = createSlice({
         type,
         parentId,
         content: type === "file" ? content : undefined,
-        childrenIds: type === "folder" ? [] : [],
+        childrenIds: [],
         createdAt: now,
         updatedAt: now,
       };
@@ -49,7 +47,10 @@ const fileSystemSlice = createSlice({
       saveToLocalStorage(state);
     },
 
-    renameItem: (state, action: PayloadAction<RenameItemPayload>) => {
+    renameItem: (
+      state,
+      action: PayloadAction<{ id: string; newName: string }>,
+    ) => {
       const { id, newName } = action.payload;
       if (state.items[id]) {
         state.items[id].name = newName;
@@ -58,7 +59,7 @@ const fileSystemSlice = createSlice({
       }
     },
 
-    deleteItem: (state, action: PayloadAction<DeleteItemPayload>) => {
+    deleteItem: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
 
       const deleteRecursive = (itemId: string) => {
@@ -83,7 +84,6 @@ const fileSystemSlice = createSlice({
         if (state.folderState.selectedFolderId === itemId) {
           state.folderState.selectedFolderId = null;
         }
-
         if (state.folderState.editingFileId === itemId) {
           state.folderState.editingFileId = null;
         }
@@ -95,7 +95,7 @@ const fileSystemSlice = createSlice({
 
     updateFileContent: (
       state,
-      action: PayloadAction<UpdateFileContentPayload>,
+      action: PayloadAction<{ id: string; content: string }>,
     ) => {
       const { id, content } = action.payload;
       if (state.items[id] && state.items[id].type === "file") {
@@ -103,30 +103,6 @@ const fileSystemSlice = createSlice({
         state.items[id].updatedAt = Date.now();
         saveToLocalStorage(state);
       }
-    },
-
-    moveItem: (state, action: PayloadAction<MoveItemPayload>) => {
-      const { id, newParentId } = action.payload;
-      const item = state.items[id];
-
-      if (!item) return;
-
-      const oldParentId = item.parentId;
-
-      if (oldParentId && state.items[oldParentId]) {
-        state.items[oldParentId].childrenIds = state.items[
-          oldParentId
-        ].childrenIds.filter((childId) => childId !== id);
-      }
-
-      item.parentId = newParentId;
-      item.updatedAt = Date.now();
-
-      if (newParentId && state.items[newParentId]) {
-        state.items[newParentId].childrenIds.push(id);
-      }
-
-      saveToLocalStorage(state);
     },
 
     toggleFolder: (state, action: PayloadAction<string>) => {
@@ -145,22 +121,6 @@ const fileSystemSlice = createSlice({
       state.folderState.editingFileId = action.payload;
       saveToLocalStorage(state);
     },
-
-    expandAllFolders: (state) => {
-      Object.keys(state.items).forEach((itemId) => {
-        if (state.items[itemId].type === "folder") {
-          state.folderState.expandedFolders[itemId] = true;
-        }
-      });
-      saveToLocalStorage(state);
-    },
-
-    collapseAllFolders: (state) => {
-      Object.keys(state.folderState.expandedFolders).forEach((folderId) => {
-        state.folderState.expandedFolders[folderId] = false;
-      });
-      saveToLocalStorage(state);
-    },
   },
 });
 
@@ -169,12 +129,9 @@ export const {
   renameItem,
   deleteItem,
   updateFileContent,
-  moveItem,
   toggleFolder,
   selectFolder,
   setEditingFile,
-  expandAllFolders,
-  collapseAllFolders,
 } = fileSystemSlice.actions;
 
 export default fileSystemSlice.reducer;

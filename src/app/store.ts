@@ -5,10 +5,6 @@ export const store = configureStore({
   reducer: {
     fileSystem: fileSystemReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

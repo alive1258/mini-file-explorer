@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { createItem } from "../../features/fileSystem/fileSystemSlice";
-import { X } from "../common/Icon";
-import type { ItemType } from "../../features/fileSystem/fileSystemTypes";
+import { XIcon } from "../common/Icon";
 
 interface CreateItemModalProps {
   parentId: string;
-  type: ItemType;
+  type: "folder" | "file";
   onClose: () => void;
 }
 
@@ -16,120 +15,137 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({
   onClose,
 }) => {
   const dispatch = useAppDispatch();
+
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim()) {
+    const trimmed = name.trim();
+
+    if (!trimmed) {
       setError("Name is required");
       return;
     }
 
-    const invalidChars = /[<>:"/\\|?*]/g;
-    if (invalidChars.test(name)) {
-      setError("Name contains invalid characters");
+    const invalidChars = /[<>:"/\\|?*]/;
+    if (invalidChars.test(trimmed)) {
+      setError("Invalid characters in name");
       return;
     }
 
-    const finalName =
-      type === "file" && !name.includes(".") ? `${name}.txt` : name;
+    let finalName = trimmed;
+
+    if (type === "file" && !finalName.includes(".")) {
+      finalName = `${finalName}.txt`;
+    }
 
     dispatch(
       createItem({
         parentId,
         name: finalName,
         type,
-        content: type === "file" ? content : undefined,
+        content,
       }),
     );
 
     onClose();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") {
-      onClose();
-    }
-  };
-
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-in fade-in"
-      onClick={onClose}
-      onKeyDown={handleKeyDown}
-    >
-      <div
-        className="bg-white dark:bg-gray-900 rounded-lg p-6 w-96 max-w-full animate-in slide-in-from-bottom-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Create New {type === "folder" ? "Folder" : "File"}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 sm:p-4">
+      {/* MODAL */}
+      <div className="w-full max-w-md sm:max-w-lg bg-[#0d0d0d] text-white rounded-xl border border-gray-800 shadow-2xl overflow-hidden">
+        {/* HEADER */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800 bg-black">
+          <h2 className="text-sm sm:text-lg font-semibold">
+            ➕ Create {type === "folder" ? "Folder" : "File"}
           </h2>
+
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-2 rounded hover:bg-gray-800 transition"
           >
-            <X size={20} />
+            <XIcon size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Name
-            </label>
+        {/* BODY */}
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          {/* NAME INPUT */}
+          <div>
+            <label className="text-xs text-gray-400">Name</label>
             <input
-              type="text"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                setError("");
+                setError(null);
               }}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                error
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
-              } bg-white dark:bg-gray-800 text-gray-900 dark:text-white`}
-              placeholder={type === "folder" ? "Folder name" : "File name"}
+              className="
+                w-full mt-1
+                px-3 py-2
+                bg-[#111]
+                border border-gray-700
+                rounded-lg
+                text-white text-sm
+                outline-none
+                focus:border-blue-500
+                focus:ring-1 focus:ring-blue-500
+              "
+              placeholder={type === "folder" ? "My Folder" : "myfile.txt"}
               autoFocus
             />
-            {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+
+            {error && <p className="text-xs text-red-400 mt-1">{error}</p>}
           </div>
 
+          {/* FILE CONTENT */}
           {type === "file" && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Content (Optional)
+            <div>
+              <label className="text-xs text-gray-400">
+                Content (optional)
               </label>
+
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={5}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm"
-                placeholder="Enter file content..."
+                className="
+                  w-full mt-1
+                  px-3 py-2
+                  bg-[#111]
+                  border border-gray-700
+                  rounded-lg
+                  text-white text-sm font-mono
+                  outline-none
+                  focus:border-blue-500
+                  focus:ring-1 focus:ring-blue-500
+                  resize-none
+                "
+                placeholder="Write your file content..."
               />
+
+              <p className="text-[10px] text-gray-500 mt-1">
+                Supports multi-line text
+              </p>
             </div>
           )}
 
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Create
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
+          {/* ACTION BUTTON */}
+          <button
+            type="submit"
+            className="
+              w-full py-2.5
+              bg-blue-600 hover:bg-blue-700
+              rounded-lg
+              text-sm font-medium
+              transition
+            "
+          >
+            Create {type === "folder" ? "Folder" : "File"}
+          </button>
         </form>
       </div>
     </div>
