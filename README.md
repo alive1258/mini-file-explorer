@@ -6,8 +6,7 @@ A lightweight and responsive file explorer application built with React/Next.js,
 
 ## 🚀 Live Demo
 
-- Live URL: https://your-live-demo-url.com
-- Repository: https://github.com/your-username/mini-file-explorer
+- Live URL: https://mini-file-explorer-rosy.vercel.app
 
 ---
 
@@ -56,7 +55,7 @@ A lightweight and responsive file explorer application built with React/Next.js,
 | TypeScript         | Type Safety        |
 | Tailwind CSS       | Styling            |
 | LocalStorage       | Persistence        |
-| React Hooks        | State Management   |
+| Redux              | State Management   |
 
 ---
 
@@ -142,7 +141,7 @@ npm run dev
 Application will run at:
 
 ```bash
-http://localhost:3000
+http://localhost:5173
 ```
 
 ---
@@ -167,15 +166,25 @@ type FileSystemItem = {
 
 The application uses:
 
-- React Hooks
-- Context API / Redux Toolkit
+- React Redux
 - LocalStorage synchronization
 
-### Why?
+## Why Redux ?
 
-- Lightweight
-- Easy to maintain
-- No unnecessary dependencies
+- Centralized and predictable state management
+- Simplifies handling nested folder/file structures
+- Easier scalability for larger applications
+- Cleaner reducer and action management
+- Better debugging and maintainability
+- Minimal boilerplate compared to traditional Redux
+
+## Persistence
+
+The file system state is synchronized with LocalStorage to ensure:
+
+- Data persists after page refresh
+- Better user experience
+- No backend dependency required
 
 ---
 
@@ -241,30 +250,6 @@ This project follows:
 
 ---
 
-# 📦 Future Improvements
-
-Potential future enhancements:
-
-- Drag & drop support
-- Multiple file types
-- Search functionality
-- File icons by extension
-- Keyboard shortcuts
-- Context menus
-- Dark mode
-- Unit testing
-
----
-
-# 🔐 Assumptions
-
-- Backend integration is not required
-- File data is stored locally
-- Only text files are supported
-- Authentication is out of scope
-
----
-
 # 📝 Challenges Faced
 
 Some implementation challenges included:
@@ -295,11 +280,10 @@ The application was designed with maintainability, readability, and user experie
 # 👨‍💻 Author
 
 **Your Name**  
-Frontend Developer
+Zamirul Kabir
 
-- Portfolio: https://your-portfolio.com
-- LinkedIn: https://linkedin.com/in/your-profile
-- GitHub: https://github.com/your-username
+- Portfolio: https://zamirul-kabir-portfolio.vercel.app/
+- LinkedIn: https://www.linkedin.com/in/zamirul-kabir/
 
 ---
 
