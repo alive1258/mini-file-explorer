@@ -56,7 +56,6 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 sm:p-4">
-      {/* MODAL */}
       <div className="w-full max-w-md sm:max-w-lg bg-[#0d0d0d] text-white rounded-xl border border-gray-800 shadow-2xl overflow-hidden">
         {/* HEADER */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800 bg-black">
@@ -72,9 +71,7 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({
           </button>
         </div>
 
-        {/* BODY */}
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
-          {/* NAME INPUT */}
           <div>
             <label className="text-xs text-gray-400">Name</label>
             <input
@@ -126,14 +123,9 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({
                 "
                 placeholder="Write your file content..."
               />
-
-              <p className="text-[10px] text-gray-500 mt-1">
-                Supports multi-line text
-              </p>
             </div>
           )}
 
-          {/* ACTION BUTTON */}
           <button
             type="submit"
             className="

@@ -13,7 +13,6 @@ const TextEditorModal: React.FC<{ fileId: string; onClose: () => void }> = ({
 
   const [content, setContent] = useState("");
 
-  // ✅ sync file content safely
   useEffect(() => {
     if (file?.content) {
       setContent(file.content);
@@ -36,16 +35,14 @@ const TextEditorModal: React.FC<{ fileId: string; onClose: () => void }> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 sm:p-4">
-      {/* MODAL WRAPPER */}
       <div className="w-full max-w-4xl h-[95vh] sm:h-[85vh] flex flex-col bg-[#0d0d0d] text-white rounded-xl shadow-2xl overflow-hidden border border-gray-800">
-        {/* HEADER */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-gray-800 bg-black sticky top-0">
           <div className="min-w-0">
             <h2 className="text-sm sm:text-lg font-semibold truncate">
-              📝 {file.name}
+              {file.name}
             </h2>
             <p className="md:text-base text-sm text-gray-400">
-              Yoy also Updated this content. You can edit and save it.
+              You also updated this content. You can edit and save it.
             </p>
           </div>
 

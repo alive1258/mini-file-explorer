@@ -9,7 +9,6 @@ function App() {
 
   return (
     <div className="flex h-screen bg-black text-white overflow-hidden">
-      {/* BACKDROP (mobile only) */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
@@ -17,7 +16,6 @@ function App() {
         />
       )}
 
-      {/* SIDEBAR WRAPPER */}
       <div
         className={`
           fixed md:static z-50
@@ -36,12 +34,10 @@ function App() {
         />
       </div>
 
-      {/* MAIN */}
       <div className="flex-1 min-w-0 w-full">
         <MainPanel />
       </div>
 
-      {/* FLOAT BUTTON */}
       <button
         onClick={() => setMobileOpen(true)}
         className="md:hidden fixed top-2 left-2 z-10 bg-gray-900/60 px-2 py-1 rounded-lg border border-gray-700"
@@ -49,7 +45,6 @@ function App() {
         ☰
       </button>
 
-      {/* DESKTOP COLLAPSE TOGGLE */}
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="hidden md:block fixed bottom-4 left-4 z-50 bg-gray-900/60 p-2 rounded-lg border border-gray-700"

@@ -30,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         ${collapsed ? "md:w-16" : "md:w-72"}
       `}
     >
-      {/* HEADER */}
       <div className="p-3 border-b border-gray-800 bg-gray-900/60 flex items-center justify-between">
         {!collapsed && (
           <div className="flex items-center gap-2">
@@ -40,7 +39,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
 
         <div className="flex items-center gap-2">
-          {/* MOBILE CLOSE */}
           <button
             className="md:hidden p-1 hover:bg-gray-800 rounded"
             onClick={() => setMobileOpen(false)}
@@ -48,7 +46,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             ✕
           </button>
 
-          {/* DESKTOP COLLAPSE */}
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="hidden md:block p-2 rounded hover:bg-gray-800 transition"
@@ -62,7 +59,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* TREE */}
       <nav className="flex-1 overflow-y-auto p-2 space-y-1">
         {rootFolders.length === 0
           ? !collapsed && (
@@ -76,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 folderId={folder.id}
                 level={0}
                 collapsed={collapsed}
-                setMobileOpen={setMobileOpen} // ✅ IMPORTANT
+                setMobileOpen={setMobileOpen}
               />
             ))}
       </nav>

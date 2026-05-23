@@ -86,7 +86,6 @@ const MainPanel: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1  gap-4">
             {contents.map((item) => {
-              // Extra safety check
               if (!item || !item.id) {
                 console.error("Invalid item found:", item);
                 return null;

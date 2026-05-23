@@ -24,7 +24,6 @@ const CreateMenu: React.FC<CreateMenuProps> = ({ onNewFolder, onNewFile }) => {
 
   return (
     <div className="relative md:text-base text-sm" ref={menuRef}>
-      {/* BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
@@ -33,10 +32,8 @@ const CreateMenu: React.FC<CreateMenuProps> = ({ onNewFolder, onNewFile }) => {
         <span>Create New</span>
       </button>
 
-      {/* DROPDOWN */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-52 bg-gray-900/60 backdrop-blur-xl border border-gray-700 rounded-lg shadow-xl py-1 z-50 animate-fadeIn">
-          {/* NEW FOLDER */}
           <button
             onClick={() => {
               onNewFolder();
@@ -48,7 +45,6 @@ const CreateMenu: React.FC<CreateMenuProps> = ({ onNewFolder, onNewFile }) => {
             New Folder
           </button>
 
-          {/* NEW FILE */}
           <button
             onClick={() => {
               onNewFile();

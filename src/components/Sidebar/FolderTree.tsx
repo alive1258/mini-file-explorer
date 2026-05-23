@@ -42,7 +42,6 @@ const FolderTree: React.FC<FolderTreeProps> = ({
 
   return (
     <div>
-      {/* NODE */}
       <div
         className={`
           flex items-center gap-2
@@ -57,11 +56,9 @@ const FolderTree: React.FC<FolderTreeProps> = ({
         onClick={() => {
           dispatch(selectFolder(folderId));
 
-          // ✅ AUTO CLOSE MOBILE SIDEBAR
           setMobileOpen?.(false);
         }}
       >
-        {/* EXPAND BUTTON */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -82,7 +79,6 @@ const FolderTree: React.FC<FolderTreeProps> = ({
 
         <FolderIcon size={18} />
 
-        {/* TEXT */}
         {!collapsed && (
           <>
             <span className="text-sm truncate flex-1">{folder.name}</span>
@@ -96,7 +92,6 @@ const FolderTree: React.FC<FolderTreeProps> = ({
         )}
       </div>
 
-      {/* CHILDREN */}
       {isExpanded && subfolders.length > 0 && !collapsed && (
         <div className="mt-1">
           {subfolders.map((child) => (

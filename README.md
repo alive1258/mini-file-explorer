@@ -1,73 +1,308 @@
-# React + TypeScript + Vite
+# Mini File Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight and responsive file explorer application built with React/Next.js, TypeScript, and Tailwind CSS. The application allows users to create, rename, delete, and manage folders/files in a hierarchical structure similar to a desktop file manager.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Live Demo
 
-## React Compiler
+- Live URL: https://your-live-demo-url.com
+- Repository: https://github.com/your-username/mini-file-explorer
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+# 📌 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Folder & File Management
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Create folders and text files
+- Rename folders and files
+- Delete folders/files
+- Recursive folder deletion support
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Navigation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Expand/collapse folder tree
+- Nested folder support
+- Sidebar tree navigation
+- Open folders in the main panel
+
+## Text File Editor
+
+- Open text files
+- Edit content
+- Save changes instantly
+
+## UI & UX
+
+- Responsive layout
+- Clean and minimal interface
+- Reusable components
+- Optimized state management
+
+## Data Persistence
+
+- LocalStorage support
+- Mock JSON initialization
+- State persists after page refresh
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology         | Purpose            |
+| ------------------ | ------------------ |
+| React.js / Next.js | Frontend Framework |
+| TypeScript         | Type Safety        |
+| Tailwind CSS       | Styling            |
+| LocalStorage       | Persistence        |
+| React Hooks        | State Management   |
+
+---
+
+# 📂 Project Structure
+
+```bash
+mini-file-explorer/
+├── src/
+│   ├── app/
+│   │   ├── store.ts
+│   │   └── hooks.ts
+│   │
+│   ├── features/
+│   │   └── fileSystem/
+│   │       ├── fileSystemSlice.ts
+│   │       └── fileSystemTypes.ts
+│   │
+│   ├── components/
+│   │   ├── Sidebar/
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── FolderTree.tsx
+│   │   │
+│   │   ├── MainPanel/
+│   │   │   ├── MainPanel.tsx
+│   │   │   ├── FileItem.tsx
+│   │   │   └── CreateMenu.tsx
+│   │   │
+│   │   ├── Modals/
+│   │   │   ├── CreateItemModal.tsx
+│   │   │   ├── RenameModal.tsx
+│   │   │   └── TextEditorModal.tsx
+│   │   │
+│   │   └── common/
+│   │       └── Icons.tsx
+│   │
+│   ├── utils/
+│   │   └── localStorage.ts
+│   │
+│   ├── data/
+│   │   └── mockData.ts
+│   │
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+│
+├── index.html
+├── package.json
+├── tailwind.config.js
+├── postcss.config.js
+├── vite.config.ts
+├── tsconfig.json
+└── tsconfig.node.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# ⚙️ Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/mini-file-explorer.git
 ```
+
+## 2. Navigate to Project Folder
+
+```bash
+cd mini-file-explorer
+```
+
+## 3. Install Dependencies
+
+```bash
+npm install
+```
+
+## 4. Start Development Server
+
+```bash
+npm run dev
+```
+
+Application will run at:
+
+```bash
+http://localhost:3000
+```
+
+---
+
+# 🧠 Application Architecture
+
+## File System Data Structure
+
+```ts
+type FileSystemItem = {
+  id: string;
+  name: string;
+  type: "folder" | "text";
+  content?: string;
+  children?: FileSystemItem[];
+};
+```
+
+---
+
+# 🔄 State Management
+
+The application uses:
+
+- React Hooks
+- Context API / Redux Toolkit
+- LocalStorage synchronization
+
+### Why?
+
+- Lightweight
+- Easy to maintain
+- No unnecessary dependencies
+
+---
+
+# 🎨 UI Design Decisions
+
+## Sidebar
+
+- Recursive folder tree rendering
+- Expand/collapse state handling
+- Active folder highlighting
+
+## Main Panel
+
+- Displays selected folder contents
+- File actions available inline
+- Responsive grid/list layout
+
+## Editor Modal
+
+- Dedicated editor for text files
+- Save/cancel support
+
+---
+
+# 📱 Responsive Design
+
+The application is optimized for:
+
+- Desktop
+- Tablet
+- Mobile devices
+
+Tailwind utility classes are used extensively for responsiveness.
+
+---
+
+# 🧪 Core Functionalities
+
+| Feature                  | Status |
+| ------------------------ | ------ |
+| Create Folder            | ✅     |
+| Create Text File         | ✅     |
+| Rename Item              | ✅     |
+| Delete Item              | ✅     |
+| Recursive Delete         | ✅     |
+| Expand/Collapse          | ✅     |
+| Text Editing             | ✅     |
+| LocalStorage Persistence | ✅     |
+| Responsive Design        | ✅     |
+
+---
+
+# 🧹 Code Quality
+
+This project follows:
+
+- Component reusability
+- Clean architecture
+- Separation of concerns
+- Type-safe implementation
+- ESLint best practices
+- Readable folder structure
+
+---
+
+# 📦 Future Improvements
+
+Potential future enhancements:
+
+- Drag & drop support
+- Multiple file types
+- Search functionality
+- File icons by extension
+- Keyboard shortcuts
+- Context menus
+- Dark mode
+- Unit testing
+
+---
+
+# 🔐 Assumptions
+
+- Backend integration is not required
+- File data is stored locally
+- Only text files are supported
+- Authentication is out of scope
+
+---
+
+# 📝 Challenges Faced
+
+Some implementation challenges included:
+
+- Recursive tree rendering
+- Managing deeply nested updates
+- Recursive deletion handling
+- Synchronizing localStorage with state
+- Keeping components reusable and scalable
+
+---
+
+# ✅ Conclusion
+
+This project demonstrates:
+
+- Strong React fundamentals
+- TypeScript proficiency
+- Component-driven architecture
+- State management understanding
+- Clean UI implementation
+- Scalable frontend structure
+
+The application was designed with maintainability, readability, and user experience in mind.
+
+---
+
+# 👨‍💻 Author
+
+**Your Name**  
+Frontend Developer
+
+- Portfolio: https://your-portfolio.com
+- LinkedIn: https://linkedin.com/in/your-profile
+- GitHub: https://github.com/your-username
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.

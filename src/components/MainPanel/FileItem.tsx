@@ -1,4 +1,3 @@
-import React from "react";
 import { FolderIcon, FileIcon, EditIcon, TrashIcon } from "../common/Icon";
 import type { FileSystemItem } from "../../features/fileSystem/fileSystemTypes";
 
@@ -21,7 +20,7 @@ const FileItem: React.FC<FileItemProps> = ({
     <div
       onClick={() => {
         if (item.type === "file") {
-          onEdit?.(item.id); // ✅ OPEN EDITOR MODAL
+          onEdit?.(item.id);
         }
       }}
       className="
@@ -44,20 +43,17 @@ const FileItem: React.FC<FileItemProps> = ({
           )}
 
           <div className="flex-1 min-w-0">
-            {/* NAME */}
             <div className="font-medium text-gray-900 dark:text-white truncate">
               {item.name}
             </div>
 
-            {/* DATE */}
             <div className="text-xs text-gray-500 mt-1">
-              📅 {new Date(item.updatedAt).toLocaleDateString()}
+              {new Date(item.updatedAt).toLocaleDateString()}
             </div>
 
-            {/* ONLY PREVIEW (NOT FULL CONTENT) */}
             {item.type === "file" && item.content && (
               <div className="mt-2 text-xs text-gray-400 line-clamp-2">
-                {item.content.slice(0, 80)}...
+                {item.content.slice(0, 120)}...
               </div>
             )}
 
@@ -69,14 +65,14 @@ const FileItem: React.FC<FileItemProps> = ({
 
             {item.type === "folder" && (
               <div className="mt-1 text-xs text-gray-400">
-                📁 {item.childrenIds?.length || 0} items
+                {item.childrenIds?.length || 0} items
               </div>
             )}
           </div>
         </div>
 
         {/* ACTIONS */}
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex gap-1">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -92,14 +88,13 @@ const FileItem: React.FC<FileItemProps> = ({
               e.stopPropagation();
               onDelete(item.id);
             }}
-            className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+            className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900 rounded"
           >
             <TrashIcon size={16} />
           </button>
         </div>
       </div>
 
-      {/* BUTTON (optional UX clarity) */}
       {item.type === "file" && (
         <div className="mt-3 text-xs text-blue-500">
           Click anywhere to to see full content and edit

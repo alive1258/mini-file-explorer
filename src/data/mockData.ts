@@ -1,39 +1,3 @@
-// import { v4 as uuidv4 } from "uuid";
-// import type { FileSystemState } from "../features/fileSystem/fileSystemTypes";
-
-// const rootId = uuidv4();
-// const documentsId = uuidv4();
-
-// export const initialData: FileSystemState = {
-//   items: {
-//     [rootId]: {
-//       id: rootId,
-//       name: "My Drive",
-//       type: "folder",
-//       parentId: null,
-//       childrenIds: [documentsId],
-//       createdAt: Date.now(),
-//       updatedAt: Date.now(),
-//     },
-//     [documentsId]: {
-//       id: documentsId,
-//       name: "Documents",
-//       type: "folder",
-//       parentId: rootId,
-//       childrenIds: [],
-//       createdAt: Date.now(),
-//       updatedAt: Date.now(),
-//     },
-//   },
-//   folderState: {
-//     expandedFolders: {
-//       [rootId]: true,
-//     },
-//     selectedFolderId: rootId,
-//     editingFileId: null,
-//   },
-// };
-
 import { v4 as uuidv4 } from "uuid";
 import type { FileSystemState } from "../features/fileSystem/fileSystemTypes";
 
